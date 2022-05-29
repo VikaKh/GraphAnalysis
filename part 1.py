@@ -3,6 +3,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+import networkx as nx
 
 def dfs(graph, a = 0, x = []):
     # 0 - for components
