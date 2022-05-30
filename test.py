@@ -1,7 +1,6 @@
 FILENAME = 'CA-AstroPh.txt'
 ORIENTED = False
 LANDMARKS_COUNT = range(20, 101, 40)
-#LANDMARKS_COUNT = range(2, 10, 2)
 import datetime as tm
 import networkx as nx
 
@@ -204,9 +203,7 @@ def landmarks_choose(start, finish, graph, selection_type, landmarks_count):
         rand_nod = [i[0] for i in graph_items]
         random.shuffle(rand_nod)
         rand_nod = rand_nod[:landmarks_count]
-        ###############################################################################################################################################
-        #rand_nod = [7, 5, 6, 10, 11, 13, 2, 3]
-        ###############################################################################################################################################
+        
         for v in rand_nod:
             path_from_start = short_path(start, v, graph)
             graph[start]['shortest_paths'][v] = path_from_start
@@ -228,9 +225,7 @@ def landmarks_choose(start, finish, graph, selection_type, landmarks_count):
     elif selection_type == 'degree':
         sort_degree = sorted(graph_items, key=lambda x: x[1]['degree'], reverse=True) 
         degree_nod = [i[0] for i in sort_degree[:landmarks_count]]
-        ###############################################################################################################################################
-        #degree_nod = [7, 5, 6, 10, 11, 13, 2, 3]
-        ###############################################################################################################################################
+
 
         for v in degree_nod:
             path_from_start = short_path(start, v, graph)
@@ -281,9 +276,7 @@ def landmarks_choose(start, finish, graph, selection_type, landmarks_count):
 
 
 
-        ###############################################################################################################################################
-        #number_of_uses = [7, 5, 6, 10, 11, 13, 2, 3]
-        ###############################################################################################################################################
+
         for v in number_of_uses:
             path_from_start = short_path(start, v, graph)
             graph[start]['shortest_paths'][v] = path_from_start
@@ -384,8 +377,6 @@ def landmarks_bfs(start, finish, graph):
         if path == -1 or path == []:
             continue
         if path[len(path)-1] not in little_graph:
-#            if path[len(path)-1] == 0.0:
- #               a=5
             little_graph[path[len(path)-1]] = { 
                 'linked': [],
             }
@@ -393,8 +384,6 @@ def landmarks_bfs(start, finish, graph):
             if path[v] in little_graph and path[v+1] not in little_graph[path[v]]['linked']:
                 little_graph[path[v]]['linked'].append(path[v+1])
             elif path[v] not in little_graph:
-#                if path[v] == 0.0:
- #                   a=5
                 little_graph[path[v]] = {
                     'linked': [path[v+1]],
                 }
@@ -403,15 +392,10 @@ def landmarks_bfs(start, finish, graph):
             if path[v+1] in little_graph and path[v] not in little_graph[path[v+1]]['linked']:
                 little_graph[path[v+1]]['linked'].append(path[v])
             elif path[v+1] not in little_graph:
-#                if path[v+1] == 0.0:
- #                   a=5
                 little_graph[path[v+1]] = {
                     'linked': [path[v]],
                 }
                 
-            
-
-    #fl = little_graph[start]
     path, bfs_time = bfs(start, finish, little_graph)
     return path, (tm.datetime.now() - start_time).total_seconds()
 
@@ -479,7 +463,7 @@ import networkx as nx
 import collections
 
 
-"""[здесь будет словарь с ключом - количество лендмарок и значениями: точность и время работы]"""
+
 results = {'basic':{
                     'random': {}, 
                     'degree': {},
@@ -529,22 +513,12 @@ for landmarks_count in LANDMARKS_COUNT:
 
 with open('results_test_CA-GrQc.txt', 'w') as file:
     tic = tm.datetime.now()
-    #    file.write('Start time: ' + '\n')
-    #   file.write(str(tic) + '\n')
 
     graph = parse(FILENAME, ORIENTED)
     graph_items = graph.items()
     graph_size = len(graph_items)
     marks_selection = ('random', 'degree', 'coverege')
 
-
-
-
-
-
-
-
-    #    file.write('Count of nodes: ' + str(graph_size) + '\n')
 
     #выбор начальной и конечной вершины
 
@@ -562,50 +536,9 @@ with open('results_test_CA-GrQc.txt', 'w') as file:
     nodes_finish = nodes_finish[:number_of_tests]
 
     #запуск алгоритмов с разными параметрами
-
-
-
-
-    real_bfs_difference = {}
-    real_bfs_difference[-1] = 0 #landmarks_bfs did not find the way
-    real_bfs_difference[-2] = 0 #нет пути между вершинами
-    approx_bfs_difference = {}
-    approx_bfs_difference[-1] = 0 #landmarks_bfs did not find the way
-    approx_bfs_difference[-2] = 0 #landmarks_basic did not find the way
-    approx_bfs_difference[-3] = 0 #landmarks_basic and landmarks_bfs did not find the way
-    approx_bfs_difference[-4] = 0 #нет пути между вершинами
-
-
-
-    #    G = nx.Graph()
-    #   with open('3.txt') as graph_file:
-    #      row = graph_file.readline()
-    #     while row:
-    #        parent, child = row.split()
-        #       parent = (int(parent))
-        #      child = (int(child))
-        #     if parent not in G:
-        #        G.add_node(parent)
-            #   if child not in G:
-            #      G.add_node(child)
-            # if (parent, child) not in G:
-            #    G.add_edge(parent, child)
-    #            if (child, parent) not in G:
-    #               G.add_edge(child, parent)
-    #          row = graph_file.readline()
-
-
-
-
-    
     for selection in marks_selection:
         for landmarks_count in LANDMARKS_COUNT:
             for start, finish in zip(nodes_start,nodes_finish):
-
-            #сброс данных
-    #            for k, v in graph.items():
-    #               v['length'] = {}
-    #              v['shortest_paths'] = {}
             
                 for k, v in graph.items():
                     v['length'] = {}
@@ -615,36 +548,12 @@ with open('results_test_CA-GrQc.txt', 'w') as file:
                         start += 1
                     else:
                         start -= 1
-                ###############################################################################################################################################
-                #start = 8
-                #finish = 9
-                ###############################################################################################################################################
-
-    #                file.write('-' * 50 + '\n')
-    #               file.write(selection + '\n') 
-    #              file.write('-' * 50 + '\n')
-    #             file.write('landmarks_count: ' + str(landmarks_count) + '\n')
-    #            file.write('-' * 50 + '\n')
-        #           file.write('Start: ' + str(start) + '\n') 
-        #          file.write('Finish: ' + str(finish) + '\n') 
-        #         file.write('=' * 50 + '\n')
-
-
-
 
                 landmarks, timer_landmarks = landmarks_choose (start, finish, graph, selection, landmarks_count)
                 results['choose_landmarks'][selection][landmarks_count]['time'] += timer_landmarks
-                #print(timer_landmarks)
-                
-
-    #                file.write ('Landmarks: ' + str(landmarks) + '\n')
-    #               file.write('=' * 50 + '\n')
-
-
 
                 path_bfs, timer_bfs = landmarks_bfs (start, finish, graph)
-                #print (results['landmarks_bfs'][selection][landmarks_count]['time'])
-                #print (timer_bfs)
+
                 results['landmarks_bfs'][selection][landmarks_count]['time'] += timer_bfs
 
 
@@ -655,104 +564,14 @@ with open('results_test_CA-GrQc.txt', 'w') as file:
 
                 s_path, timer_exact = bfs(start, finish, graph)
                 results['bfs'][selection][landmarks_count]['time'] += timer_exact
- 
 
-
-    #                results_time['basic'][selection][landmarks_count] = {timer_bfs, timer_basic, """"точность и время алгоритмов"""}
-    #               results_time['landmarks_bfs'][selection][landmarks_count] = {timer_bfs, timer_basic, """"точность и время алгоритмов"""}
-    #              results_time['bfs'][selection][landmarks_count] = {timer_bfs, timer_basic, """"точность и время алгоритмов"""}
-
-                
-
-
-    #                if path_bfs != -1:
-    #                   file.write('Distance landmarks_bfs:' + str(len(path_bfs)) + '\n')
-    #              else:
-    #                 file.write('Distance landmarks_bfs:' + str(-1) + '\n')
-    #            if path_basic != -1:
-        #               file.write('Distance path_basic:' + str(len(path_basic)) + '\n')
-        #          else:
-        #             file.write('Distance path_basic:' + str(-1) + '\n')
-        #        if s_path != -1:
-            #           file.write('Distance path_real:' + str(len(s_path)) + '\n')
-            #      else:
-            #         file.write('Distance path_real:' + str(-1) + '\n')
-            #    file.write('=' * 50 + '\n')
-
-
-
-    #                file.write('Path for pure bfs:' + str(s_path) + '\n')
-    #               file.write('=' * 50 + '\n')
-
-    #              file.write('Path for landmarks_bfs:' + str(path_bfs) + '\n')
-    #             file.write('=' * 50 + '\n')
- 
-    #            file.write('Path for landmarks_basic: ' + str(path_basic) + '\n')
-        #           file.write('=' * 50 + '\n')
-
-
-
-
-
-
-    #                try:
-    #                   s_path = nx.shortest_path(G, source=start, target=finish, weight=None, method='dijkstra')
-    #              except Exception:
-    #                 s_path = -1
-    #            file.write('Real shortest path:' + str(s_path) + '\n')
-        #           if s_path != -1:
-        #              file.write('Distance real shortest path: ' + str(len(s_path)) + '\n')
-        #         else:
-        #            file.write('Distance real shortest path: ' + str(-1) + '\n')
-            #       file.write('=' * 50 + '\n')
-            
-#                if s_path == -1 and path_bfs == -1:
-#                    difference = -2
                 if s_path != -1 and path_bfs != -1:
-#                    difference = len(path_bfs) - len(s_path)
                     approximation_error_bfs = (len(path_bfs) - len(s_path))/len(s_path)
                     results['landmarks_bfs'][selection][landmarks_count]['accuracy'] += approximation_error_bfs
-#                else:
-#                    difference = -1
-                
-                
 
-
-#                if difference not in real_bfs_difference:
- #                   real_bfs_difference[difference] = 1
-  #              else:
-   #                 real_bfs_difference[difference] += 1
-
-
-
-#                if s_path == -1:
- #                   accurateness = -4
-  #              elif s_path != -1 and path_bfs == -1 and path_basic != -1:
-   #                 accurateness = -1
-    #            elif s_path != -1 and path_bfs != -1 and path_basic == -1:
-     #               accurateness = -2
-      #          elif s_path != -1 and path_bfs == -1 and path_basic == -1:
-       #             accurateness = -3
-        #        else:
                 if s_path != -1 and path_bfs != -1 and path_basic != -1:
-#                    accurateness = len(path_basic) - len(path_bfs)
                     approximation_error_basic = (len(path_basic) - len(s_path))/len(s_path)
                     results['basic'][selection][landmarks_count]['accuracy'] += approximation_error_basic
-
-                
-#                if accurateness not in approx_bfs_difference:
- #                   approx_bfs_difference[accurateness] = 1
-  #              else:
-   #                 approx_bfs_difference[accurateness] += 1
-
-
-                """operations = operations_basic - operations_bfs
-                time = time_basic.total_seconds() - time_bfs.total_seconds()"""
-
-    #                file.write('accurateness: ' + str(accurateness) + '\n')
-                """print('Operations: ' + str(operations))
-                print('Time: ' + str(time))"""
-    #               file.write('*' * 100 + '\n')
 
             results['basic'][selection][landmarks_count]['accuracy'] /= number_of_tests
             results['landmarks_bfs'][selection][landmarks_count]['accuracy'] /= number_of_tests
@@ -760,45 +579,8 @@ with open('results_test_CA-GrQc.txt', 'w') as file:
             results['landmarks_bfs'][selection][landmarks_count]['time'] /= number_of_tests
             results['basic'][selection][landmarks_count]['time'] /= number_of_tests
             results['bfs'][selection][landmarks_count]['time'] /= number_of_tests
-            
-
-
-
-
-
-    #    file.write('The number of cases when the landmarks_bfs did not find the way (real_bfs_difference[-1])' + '\n')
-    #   file.write('The number of cases when there is no way between vertices (real_bfs_difference[-2])' + '\n')
-    #  file.write('Number of differences between exact shortest path and landmarks_bfs shortest path: ' + '\n')
-
-#    real_bfs_difference = collections.OrderedDict(sorted(real_bfs_difference.items()))
-
-    #    file.write('{')
-    #   for difference in real_bfs_difference:
-    #      file.write(str(difference) + ': ' + str(real_bfs_difference[difference]) + '\n')
-    # file.write('}' + '\n')
-
-
-
-
-    #    file.write('The number of cases when the landmarks_bfs did not find the way (approx_bfs_difference[-1])' + '\n')
-    #   file.write('The number of cases when the landmarks_basic did not find the way (approx_bfs_difference[-2])' + '\n')
-    #  file.write('The number of cases when the landmarks_basic and landmarks_bfs did not find the way (approx_bfs_difference[-3])' + '\n')
-    # file.write('The number of cases when there is no way between vertices (approx_bfs_difference[-4])' + '\n')
-    #file.write('Number of differences between landmarks_basic shortest path and landmarks_bfs shortest path: ' + '\n')
-
-#    approx_bfs_difference = collections.OrderedDict(sorted(approx_bfs_difference.items()))
-
-    #    file.write('{')
-    #   for accurateness in approx_bfs_difference:
-    #      file.write(str(accurateness) + ': ' + str(approx_bfs_difference[accurateness]) + '\n')
-    # file.write('}' + '\n')
-
-
-
+ 
     toc = tm.datetime.now()
-    #    file.write('Finish time: ' + '\n')
-    #   file.write(str(toc) + '\n')
-    #  file.write('Working time: ' + '\n')
     file.write(str(toc - tic) + '\n')
 
 
@@ -862,13 +644,6 @@ for count in LANDMARKS_COUNT:
 
 
 
-#    y_bfs_random_accuracy.append(results['bfs']['random'][count]['accuracy'])
-#    y_bfs_degree_accuracy.append(results['bfs']['degree'][count]['accuracy'])
-#    y_bfs_coverege_accuracy.append(results['bfs']['coverege'][count]['time'])###########################################################
-#    y_choose_landmarks_random_accuracy.append(results['choose_landmarks']['random'][count]['accuracy'])
-#    y_choose_landmarks_degree_accuracy.append(results['choose_landmarks']['degree'][count]['accuracy'])
-#    y_choose_landmarks_coverege_accuracy.append(results['choose_landmarks']['coverege'][count]['accuracy'])###########################################################
-
 
 fig, ax = plt.subplots()
 plt.plot(x, y_basic_random_time, color='blue')
@@ -887,16 +662,6 @@ plt.plot(x, y_landmarks_bfs_coverege_time, color='green')
 plt.xlabel('Количество марок')
 plt.ylabel('Время работы')
 plt.title('Время работы landmarks_bfs алгоритма на марках для разных стратегий', fontsize=30)
-plt.legend(['random landmarks', 'degree landmarks', 'coverage landmarks'])
-
-
-fig, ax = plt.subplots()
-plt.plot(x, y_bfs_random_time, color='blue')
-plt.plot(x, y_bfs_degree_time, color='red')
-plt.plot(x, y_bfs_coverege_time, color='green')
-plt.xlabel('Количество марок')
-plt.ylabel('Время работы')
-plt.title('Время работы простого bfs алгоритма на марках для разных стратегий', fontsize=30)
 plt.legend(['random landmarks', 'degree landmarks', 'coverage landmarks'])
 
 
@@ -930,36 +695,4 @@ plt.title('Точность landmarks_bfs алгоритма на марках �
 plt.legend(['random landmarks', 'degree landmarks', 'coverage landmarks'])
 
 
-#fig, ax = plt.subplots()
-#plt.plot(x, y_bfs_random_accuracy, color='blue')
-#plt.plot(x, y_bfs_degree_accuracy, color='red')
-#plt.plot(x, y_bfs_coverege_accuracy, color='green')
-
-
-#fig, ax = plt.subplots()
-#plt.plot(x, y_choose_landmarks_random_accuracy, color='blue')
-#plt.plot(x, y_choose_landmarks_degree_accuracy, color='red')
-#plt.plot(x, y_choose_landmarks_coverege_accuracy, color='green')
-
-
-
-
-
-#plt.xlabel('Percent of landmarks')
-#plt.ylabel('Operations delta (operations number)')
-#plt.title('Operations delta with differend strategies of landmarks selection using middle point distance estimation', fontsize=30)
-
-
-
-
-
-
 plt.show()
-
-
-
-
-
-
-
-
