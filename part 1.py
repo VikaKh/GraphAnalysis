@@ -3,6 +3,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+import networkx as nx
 
 def dfs(graph, a = 0, x = []):
     # 0 - for components
@@ -307,6 +308,11 @@ is_oriented = True # for web-Google.txt.txt, soc-wiki-Vote.txt, email-Eu-core.tx
 graph, count_node, count_edge = read_graph('soc-wiki-Vote.txt', is_oriented, False)
 #graph, count_node, count_edge = read_graph('socfb-Reed98.txt', is_oriented, False)
 
+"""G = nx.Graph()
+with open('socfb-Reed98.txt', mode='r') as f:
+    for line in f:
+        u, v = line.split()
+        G.add_edge(u, v)"""
 
 print('Count nodes: ', count_node)
 print('Count edges: ', count_edge)
@@ -351,6 +357,12 @@ print('     number nodes: ', max_node_comp[0])
 print('     fraction of nodes: ', max_node_comp[0]/count_node, ' or ', 100*max_node_comp[0]/count_node, '%')
 print(f'Time: {toc - tic:0.4f} sec')
 
+"""tic = time.perf_counter()
+print("Count components from networkx: ",nx.number_connected_components(G))
+toc = time.perf_counter()
+print(f'Time: {toc - tic:0.4f} sec')
+largest_component = G.subgraph(nodes=max(nx.connected_components(G), key=len))"""
+
 max_degree = 0
 min_degree = graph[next(iter(graph))]['degree']
 medium_degree = 0
@@ -386,6 +398,19 @@ print('90 percentile: ', d_all[round(0.9*len(d_all))])
 toc = time.perf_counter()
 print(f'Time: {toc - tic:0.4f} sec')
 
+"""tic = time.perf_counter()
+diam = nx.diameter(largest_component)
+toc = time.perf_counter()
+radius = nx.radius(largest_component)
+print("Networks diametr: ", diam)
+print("Networks radius: ", radius)
+print(f'Time: {toc - tic:0.4f} sec')"""
+
+"""tic = time.perf_counter()
+listrain = sum(nx.triangles(G).values())
+print("Count triangle from networkx: ", int(listrain/3))
+toc = time.perf_counter()
+print(f'Time: {toc - tic:0.4f} sec')"""
 
 tic = time.perf_counter()
 count_tr = 0
